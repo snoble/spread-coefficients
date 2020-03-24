@@ -1,0 +1,16 @@
+{
+  "name": "spread-coeficients",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:snoble/spread-coefficients.git",
+  "author": "Steven Henry Klaiber-Noble <steven.noble@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-plugin-static-files-copy": "^2.3.1"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {}
+}

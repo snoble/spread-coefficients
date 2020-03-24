@@ -1,8 +1,8 @@
-module Main exposing (Calculations, Model, Msg(..), main, update, view)
+module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, input, text)
-import Html.Attributes exposing (max, min, step, type_, value)
+import Html.Attributes as HA exposing (step, type_, value)
 import Html.Events exposing (onClick, onInput)
 import List.Nonempty exposing (..)
 import Tuple
@@ -73,7 +73,7 @@ view model =
         [ button [ onClick Decrement ] [ text "-" ]
         , button [ onClick Increment ] [ text "+" ]
         , div []
-            [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), min "0.5", max "14", step "0.5", onInput ChangeDaysToDouble ] []
+            [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), HA.min "0.5", HA.max "14", step "0.5", onInput ChangeDaysToDouble ] []
             , text (model.daysToDouble |> String.fromFloat)
             ]
         , div []
@@ -87,7 +87,7 @@ view model =
                                     (model.weights |> length) - revidx - 1
                             in
                             div []
-                                [ input [ type_ "range", value (weight |> String.fromInt), min "0", max "100", onInput (ChangeWeight idx) ] []
+                                [ input [ type_ "range", value (weight |> String.fromInt), HA.min "0", HA.max "100", onInput (ChangeWeight idx) ] []
                                 , text (percentage * 100 |> String.fromFloat)
                                 , text "% "
                                 , text (infections |> String.fromFloat)
