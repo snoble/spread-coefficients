@@ -1,6 +1,8 @@
 module Main exposing (main)
 
 import Browser
+import FormatNumber exposing (format)
+import FormatNumber.Locales exposing (spanishLocale, usLocale)
 import Html exposing (Html, button, div, input, text)
 import Html.Attributes as HA exposing (step, type_, value)
 import Html.Events exposing (onClick, onInput)
@@ -17,11 +19,6 @@ type Msg
     | Decrement
     | ChangeWeight Int String
     | ChangeDaysToDouble String
-
-
-type Value t
-    = ValueError String
-    | Value t
 
 
 type alias WeightCalculation =
@@ -70,12 +67,21 @@ view model =
             calculations model.daysToDouble model.weights
     in
     div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , button [ onClick Increment ] [ text "+" ]
-        , div []
+        [ div []
             [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), HA.min "0.5", HA.max "14", step "0.5", onInput ChangeDaysToDouble ] []
             , text (model.daysToDouble |> String.fromFloat)
+            , text " days for cases to double"
             ]
+        , button [ onClick Decrement ] [ text "-" ]
+        , button [ onClick Increment ] [ text "+" ]
+        , text (calc.weightCalculations |> length |> String.fromInt)
+        , text
+            (if (calc.weightCalculations |> length) > 1 then
+                " weeks"
+
+             else
+                " week"
+            )
         , div []
             (calc.weightCalculations
                 |> reverse
@@ -88,9 +94,9 @@ view model =
                             in
                             div []
                                 [ input [ type_ "range", value (weight |> String.fromInt), HA.min "0", HA.max "100", onInput (ChangeWeight idx) ] []
-                                , text (percentage * 100 |> String.fromFloat)
+                                , text (percentage * 100 |> format usLocale)
                                 , text "% "
-                                , text (infections |> String.fromFloat)
+                                , text (infections |> format usLocale)
                                 ]
                     )
                 |> toList
