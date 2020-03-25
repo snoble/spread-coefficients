@@ -3,15 +3,15 @@ module Main exposing (main)
 import Browser
 import FormatNumber exposing (format)
 import FormatNumber.Locales exposing (spanishLocale, usLocale)
-import Html exposing (Html, button, div, input, text)
-import Html.Attributes as HA exposing (step, type_, value)
+import Html exposing (Html, button, div, input, span, text)
+import Html.Attributes as HA exposing (class, step, type_, value)
 import Html.Events exposing (onClick, onInput)
 import List.Nonempty exposing (..)
 import Tuple
 
 
 main =
-    Browser.sandbox { init = Model (fromElement 10) 2.0, update = update, view = view }
+    Browser.sandbox { init = Model (fromElement 10) 3.5, update = update, view = view }
 
 
 type Msg
@@ -67,21 +67,24 @@ view model =
             calculations model.daysToDouble model.weights
     in
     div []
-        [ div []
-            [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), HA.min "0.5", HA.max "14", step "0.5", onInput ChangeDaysToDouble ] []
-            , text (model.daysToDouble |> String.fromFloat)
+        [ div [ class "rate-input" ] [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), HA.min "0.5", HA.max "14", step "0.5", onInput ChangeDaysToDouble ] [] ]
+        , div [ class "rate-text" ]
+            [ text (model.daysToDouble |> String.fromFloat)
             , text " days for cases to double"
             ]
         , button [ onClick Decrement ] [ text "-" ]
         , button [ onClick Increment ] [ text "+" ]
-        , text (calc.weightCalculations |> length |> String.fromInt)
-        , text
-            (if (calc.weightCalculations |> length) > 1 then
-                " weeks"
+        , span [ class "weeks-text" ]
+            [ text " "
+            , text (calc.weightCalculations |> length |> String.fromInt)
+            , text
+                (if (calc.weightCalculations |> length) > 1 then
+                    " weeks"
 
-             else
-                " week"
-            )
+                 else
+                    " week"
+                )
+            ]
         , div []
             (calc.weightCalculations
                 |> reverse
@@ -92,11 +95,13 @@ view model =
                                 idx =
                                     (model.weights |> length) - revidx - 1
                             in
-                            div []
+                            div [ class "week" ]
                                 [ input [ type_ "range", value (weight |> String.fromInt), HA.min "0", HA.max "100", onInput (ChangeWeight idx) ] []
+                                , span [] [ text "In week ", text (revidx + 1 |> String.fromInt), text " " ]
                                 , text (percentage * 100 |> format usLocale)
-                                , text "% "
+                                , text "% of personal spread occurs, infecting "
                                 , text (infections |> format usLocale)
+                                , text " others."
                                 ]
                     )
                 |> toList
