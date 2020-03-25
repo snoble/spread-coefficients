@@ -70,7 +70,7 @@ view model =
         [ div [ class "rate-input" ] [ input [ type_ "range", value (model.daysToDouble |> String.fromFloat), HA.min "0.5", HA.max "14", step "0.5", onInput ChangeDaysToDouble ] [] ]
         , div [ class "rate-text" ]
             [ text (model.daysToDouble |> String.fromFloat)
-            , text " days for cases to double"
+            , text " days for infections to double"
             ]
         , button [ onClick Decrement ] [ text "-" ]
         , button [ onClick Increment ] [ text "+" ]
